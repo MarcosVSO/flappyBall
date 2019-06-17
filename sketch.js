@@ -16,25 +16,12 @@ var obstacle={
 var gravidade =3;
 var pulo = 0;
 var dificuldade = 3;
+var score = 0;
 // Run only at the beginning
 function setup() {
   createCanvas(600,400);
   var button = createButton("reset");
   button.mousePressed(resetSketch);
-}
-
-
-function resetSketch(){
-  player.x=100;
-  player.y=200;
-  diameter=30;
-
-  obstacle.x= 600;
-  obstacle.y=0;
-  obstacle.w=50;
-  obstacle.h=150;
-  obstacle.gap=100;
-  loop();
 }
 // Run in LOOP
 function draw() {
@@ -51,13 +38,15 @@ function draw() {
   noStroke();
   obstacle.x = obstacle.x - dificuldade;
   rect(obstacle.x,obstacle.y,obstacle.w,obstacle.h);
-  rect(obstacle.x,obstacle.h + obstacle.gap,obstacle.w,400 - obstacle.h - obstacle.gap);
+  var obstacle2y = obstacle.h + obstacle.gap;
+  var obstacle2h = 400 - obstacle.h - obstacle.gap;
+  rect(obstacle.x,obstacle2y,obstacle.w,obstacle2h);
   if (obstacle.x < -50){
     obstacle.x = 600;
     obstacle.h = random(70,250);
   }
 
-
+  checkCollision(obstacle2y,obstacle2h);
 }
 
 function keyPressed(){
@@ -76,10 +65,29 @@ function keyReleased(){
   return false;
 }
 
-function checkCollision(){
-  eixoX = dist(player.x,obstacle.x);
-  eixoY= dist(player.y,obstacle.x);
-  
+
+function resetSketch(){
+  player.x=100;
+  player.y=200;
+  diameter=30;
+
+  obstacle.x= 600;
+  obstacle.y=0;
+  obstacle.w=50;
+  obstacle.h=150;
+  obstacle.gap=100;
+  loop();
+}
+
+function checkCollision(obstacle2y,obstacle2h){
+  if ( player.x >= obstacle.x-obstacle.w){
+    if(player.y <= obstacle.y + obstacle.h || player.y <= obstacle2y + obstacle2h) {
+      print("colisão");
+    }else{
+      score = score + 1;
+      print(score);
+    }
+  }
 }
 
 
